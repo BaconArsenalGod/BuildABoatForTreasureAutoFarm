@@ -1,0 +1,95 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local Autofarm = Instance.new("ScreenGui")
+local AutofarmFrame = Instance.new("Frame")
+local AutofarmFrame2 = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TextLabel = Instance.new("TextLabel")
+local UICorner_2 = Instance.new("UICorner")
+local GoAutofarming = Instance.new("TextButton")
+
+--Properties:
+
+Autofarm.Name = "CoreGui"
+Autofarm.Parent = game.Workspace
+Autofarm.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+AutofarmFrame.Name = "AutofarmFrame"
+AutofarmFrame.Parent = Autofarm
+AutofarmFrame.BackgroundColor3 = Color3.fromRGB(112, 112, 112)
+AutofarmFrame.Position = UDim2.new(0.412940055, 0, 0.221929535, 0)
+AutofarmFrame.Size = UDim2.new(0, 348, 0, 278)
+AutofarmFrame.Active = true
+AutofarmFrame.Draggable = true
+
+AutofarmFrame2.Name = "AutofarmFrame2"
+AutofarmFrame2.Parent = AutofarmFrame
+AutofarmFrame2.BackgroundColor3 = Color3.fromRGB(153, 153, 153)
+AutofarmFrame2.Position = UDim2.new(0, 0, -0.258992791, 0)
+AutofarmFrame2.Size = UDim2.new(0, 348, 0, 100)
+
+UICorner.Parent = AutofarmFrame2
+
+TextLabel.Parent = AutofarmFrame2
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Position = UDim2.new(0.203539833, 0, 0.239999995, 0)
+TextLabel.Size = UDim2.new(0, 200, 0, 50)
+TextLabel.Font = Enum.Font.FredokaOne
+TextLabel.Text = "Build A Boat For Treasure Autofarm"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextSize = 25.000
+
+UICorner_2.Parent = AutofarmFrame
+
+GoAutofarming.Name = "GoAutofarming"
+GoAutofarming.Parent = AutofarmFrame
+GoAutofarming.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+GoAutofarming.BackgroundTransparency = 1.000
+GoAutofarming.Position = UDim2.new(0.201149419, 0, 0.341726631, 0)
+GoAutofarming.Size = UDim2.new(0, 200, 0, 50)
+GoAutofarming.Font = Enum.Font.FredokaOne
+GoAutofarming.Text = "autofarm CLICK HERE!"
+GoAutofarming.TextColor3 = Color3.fromRGB(0, 0, 0)
+GoAutofarming.TextScaled = true
+GoAutofarming.TextSize = 14.000
+GoAutofarming.TextWrapped = true
+GoAutofarming.MouseButton1Down:connect(function()
+	local Stages = game:GetService("Workspace").BoatStages.NormalStages
+	local client = game:GetService("Players").LocalPlayer
+	local RunService = game:GetService("RunService")
+
+	local Penguin, Gold = workspace.ChangeCharacter, workspace.ClaimRiverResultsGold
+
+	_G.Busy = true;
+
+	function Float()
+		while _G.Busy do game:GetService("RunService").RenderStepped:wait()
+			if client.Character:FindFirstChild("Humanoid") ~= nil then
+				client.Character.Humanoid:ChangeState(10)
+			end
+		end
+	end
+
+	function Farm()
+		while _G.Busy do
+			for i = 1, 10 do wait(2)
+				client.Character.HumanoidRootPart.CFrame = Stages["CaveStage"..i].DarknessPart.CFrame
+				wait(0.1)
+				workspace.ClaimRiverResultsGold:FireServer()
+			end
+			wait(1)
+
+			Penguin:FireServer("PenguinCharacter") 
+
+			repeat wait() until client.Character:FindFirstChild("HumanoidRootPart")
+
+		end
+	end
+
+	spawn(Float) spawn(Farm)
+
+end)
